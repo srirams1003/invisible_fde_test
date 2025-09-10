@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+*.pyo
+*.pyd
 
 # C extensions
 *.so
@@ -145,6 +148,8 @@ logs/
 *.swp
 *.swo
 *~
+.project
+.pydevproject
 
 # OS generated files
 .DS_Store
@@ -154,11 +159,13 @@ logs/
 .Trashes
 ehthumbs.db
 Thumbs.db
+desktop.ini
 
 # Temporary files
 tmp/
 temp/
 *.tmp
+*.temp
 
 # Security sensitive files
 *.pem
