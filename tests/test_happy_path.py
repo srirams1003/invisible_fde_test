@@ -30,6 +30,7 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
+# Fix TestClient initialization for newer versions
 client = TestClient(app)
 
 @pytest.fixture(scope="function")

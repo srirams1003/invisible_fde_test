@@ -9,8 +9,7 @@ from app.models import AccountType, TransactionType
 # Base schemas
 class BaseSchema(BaseModel):
     """Base schema with common configuration"""
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 # AccountHolder schemas
 class AccountHolderBase(BaseSchema):
