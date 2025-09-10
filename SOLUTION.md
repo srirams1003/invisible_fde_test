@@ -38,10 +38,16 @@ source venv/bin/activate  # Linux/Mac
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Start the server
+# 4. Set up environment variables (REQUIRED)
+cp .env.example .env
+
+# 5. Create database tables (REQUIRED)
+python init_db.py
+
+# 6. Start the server
 uvicorn app.main:app --reload
 
-# 5. Test the service
+# 7. Test the service
 python test_manual.py
 ```
 
@@ -85,12 +91,17 @@ cp .env.example .env
 #### **3. Database Setup**
 
 ```bash
-# Database is created automatically on first run
-# SQLite database file: ./banking.db
-# No manual database setup required
+# Create database tables (REQUIRED before first run)
+python init_db.py
+
+# Alternative: Create tables using one-liner
+python -c "from app.db import engine, Base; from app.models import *; Base.metadata.create_all(bind=engine); print('✅ Database tables created!')"
+
+# Verify database creation
+ls -la banking.db  # Should show the database file
 
 # Note: banking.db is NOT committed to git
-# It's automatically created when you first run the application
+# It's created when you run the table creation command
 # Each environment gets its own database file
 ```
 
@@ -110,19 +121,22 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 #### **5. Verify Installation**
 
 ```bash
-# Test 1: Health check
+# Test 1: Verify database tables exist
+python -c "from app.db import engine; from sqlalchemy import text; result = engine.execute(text('SELECT name FROM sqlite_master WHERE type=\"table\"')); print('Tables:', [row[0] for row in result])"
+
+# Test 2: Health check
 curl http://localhost:8000/health
 
-# Test 2: API documentation
+# Test 3: API documentation
 # Visit: http://localhost:8000/docs
 
-# Test 3: Run working tests
+# Test 4: Run working tests
 pytest test_manual.py test_auth.py test_transactions.py -v
 
-# Test 4: Run manual test suite
+# Test 5: Run manual test suite
 python test_manual.py
 
-# Test 5: Run demo client
+# Test 6: Run demo client
 python client/demo_client.py
 ```
 
@@ -161,6 +175,7 @@ invisible_take_home_test/
 ├── test_manual.py           # ✅ WORKING manual test suite (17 tests)
 ├── test_auth.py             # ✅ WORKING pytest test (authentication)
 ├── test_transactions.py     # ✅ WORKING pytest test (transactions)
+├── init_db.py               # Database initialization script
 ├── client/
 │   └── demo_client.py       # ✅ WORKING demo client (end-to-end)
 ├── requirements.txt         # Python dependencies
@@ -500,6 +515,19 @@ $ python client/demo_client.py
    - If you see `banking.db` in git status, it was previously committed
    - Remove it: `git rm --cached banking.db`
    - The `.gitignore` file already excludes `*.db` files
+
+7. **Database Table Issues**
+   - Error: `no such table: account_holders`
+   - Solution: Create database tables first
+   - Run: `python init_db.py` (recommended)
+   - Alternative: `python -c "from app.db import engine, Base; from app.models import *; Base.metadata.create_all(bind=engine); print('✅ Database tables created!')"`
+   - Verify: `python -c "from app.db import engine; from sqlalchemy import text; result = engine.execute(text('SELECT name FROM sqlite_master WHERE type=\"table\"')); print('Tables:', [row[0] for row in result])"`
+
+8. **Environment File Issues**
+   - Error: Missing `.env` file
+   - Solution: Copy environment template
+   - Run: `cp .env.example .env`
+   - Verify: `ls -la .env` should show the file exists
 
 ### Support
 
