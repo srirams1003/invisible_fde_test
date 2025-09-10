@@ -30,8 +30,12 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
-# Fix TestClient initialization for newer versions
-client = TestClient(app)
+# Note: TestClient initialization moved to individual test functions due to compatibility issues
+
+@pytest.fixture
+def client():
+    """Create TestClient instance"""
+    return TestClient(app)
 
 @pytest.fixture(scope="function")
 def setup_database():
@@ -50,7 +54,7 @@ def test_user_data():
     }
 
 @pytest.fixture
-def auth_headers(setup_database, test_user_data):
+def auth_headers(setup_database, test_user_data, client):
     """Create authenticated user and return headers"""
     # Signup
     signup_response = client.post("/api/v1/auth/signup", json=test_user_data)
@@ -70,7 +74,7 @@ def auth_headers(setup_database, test_user_data):
 class TestAuthentication:
     """Test authentication endpoints"""
     
-    def test_signup_success(self, setup_database, test_user_data):
+    def test_signup_success(self, setup_database, test_user_data, client):
         """Test successful user signup"""
         response = client.post("/api/v1/auth/signup", json=test_user_data)
         assert response.status_code == 201
