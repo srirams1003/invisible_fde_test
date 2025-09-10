@@ -27,8 +27,11 @@ A secure banking REST API built with FastAPI, SQLAlchemy, and SQLite, featuring 
 ### 🚀 **Quick Start (5 minutes)**
 
 ```bash
-# 1. Clone and navigate to project
-cd invisible_take_home_test
+# 0. Clone the repo
+git clone https://github.com/srirams1003/invisible_fde_test
+
+# 1. Navigate to project
+cd invisible_fde_test
 
 # 2. Create and activate virtual environment
 python -m venv venv
@@ -48,7 +51,11 @@ python init_db.py
 uvicorn app.main:app --reload
 
 # 7. Test the service
+pytest test_manual.py test_auth.py test_transactions.py -v
+
 python test_manual.py
+
+python client/demo_client.py
 ```
 
 ### 📋 **Detailed Setup**
@@ -139,87 +146,6 @@ python test_manual.py
 # Test 6: Run demo client
 python client/demo_client.py
 ```
-
-#### **6. API Documentation**
-
-Once running, visit:
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI Schema**: http://localhost:8000/openapi.json
-
-## Project Structure
-
-```
-invisible_take_home_test/
-├── app/
-│   ├── __init__.py
-│   ├── main.py              # FastAPI application
-│   ├── db.py                # Database configuration
-│   ├── models.py            # SQLAlchemy models
-│   ├── schemas.py           # Pydantic schemas
-│   ├── auth.py              # Authentication utilities
-│   └── routers/
-│       ├── __init__.py
-│       ├── auth.py          # Authentication endpoints
-│       ├── account_holders.py # User profile management
-│       ├── accounts.py      # Account CRUD operations
-│       ├── transactions.py  # Deposit/withdrawal operations
-│       ├── transfers.py     # Money transfer between accounts
-│       ├── cards.py         # Card management
-│       └── statements.py    # Account statements
-├── tests/
-│   ├── test_happy_path.py   # Comprehensive pytest tests (has compatibility issues)
-│   ├── test_banking_service.py # Additional test suite (has compatibility issues)
-│   ├── test_simple.py       # Simple tests (has compatibility issues)
-│   └── test_working.py      # Working test attempts (has compatibility issues)
-├── test_manual.py           # ✅ WORKING manual test suite (17 tests)
-├── test_auth.py             # ✅ WORKING pytest test (authentication)
-├── test_transactions.py     # ✅ WORKING pytest test (transactions)
-├── init_db.py               # Database initialization script
-├── client/
-│   └── demo_client.py       # ✅ WORKING demo client (end-to-end)
-├── requirements.txt         # Python dependencies
-├── pytest.ini              # pytest configuration
-├── Dockerfile              # Container configuration
-├── .env.example            # Environment template
-├── .env                    # Environment variables
-├── .gitignore              # Git ignore rules
-├── banking.db              # SQLite database (auto-created)
-├── SOLUTION.md             # This documentation
-├── SECURITY.md             # Security considerations
-└── AI_USAGE.md             # AI development practices log
-```
-
-## API Endpoints
-
-### Authentication
-- `POST /api/v1/auth/signup` - User registration
-- `POST /api/v1/auth/login` - User login (OAuth2 compatible)
-
-### Account Holders
-- `GET /api/v1/account-holders/me` - Get current user profile
-
-### Accounts
-- `POST /api/v1/accounts/` - Create new account
-- `GET /api/v1/accounts/` - List user's accounts
-- `GET /api/v1/accounts/{id}` - Get specific account details
-
-### Transactions
-- `POST /api/v1/transactions/{account_id}` - Create deposit/withdrawal
-- `GET /api/v1/transactions/{account_id}` - List account transactions
-
-### Transfers
-- `POST /api/v1/transfers/` - Transfer money between accounts
-
-### Cards
-- `POST /api/v1/cards/` - Create new card
-- `GET /api/v1/cards/` - List user's cards
-- `GET /api/v1/cards/account/{account_id}` - List account cards
-- `PATCH /api/v1/cards/{card_id}` - Update card status
-
-### Statements
-- `GET /api/v1/statements/{account_id}` - Get account statement
-- `GET /api/v1/statements/{account_id}/summary` - Get account summary
 
 ## Testing
 
@@ -376,38 +302,13 @@ services:
       - SECRET_KEY=your-secret-key-here
 ```
 
-## Security Features
-
-- **JWT Authentication**: Secure token-based authentication
-- **Password Hashing**: bcrypt with salt for password security
-- **Access Control**: Users can only access their own data
-- **Input Validation**: Comprehensive request validation
-- **SQL Injection Protection**: SQLAlchemy ORM prevents SQL injection
-- **Environment Variables**: No secrets in source code
-- **HTTPS Ready**: Production-ready security configuration
-
-## Performance Considerations
-
-- **Database Indexing**: Proper indexes on frequently queried fields
-- **Connection Pooling**: SQLAlchemy connection management
-- **Async Support**: FastAPI async capabilities
-- **Caching Ready**: Structure supports Redis/Memcached integration
-- **Scalable Architecture**: Modular design for horizontal scaling
-
-## Monitoring and Logging
-
-- **Health Check**: `/health` endpoint for monitoring
-- **Structured Logging**: Ready for structured logging integration
-- **Error Tracking**: Comprehensive error handling and reporting
-- **Metrics Ready**: Structure supports Prometheus/Grafana integration
-
 ## Security Considerations
 
 See SECURITY.md for detailed security information.
 
 ## AI Usage
 
-See AI_USAGE.md for AI development practices and tools used.
+See AI_USAGE.md for AI tools used.
 
 ## 🧪 **Complete Testing Guide**
 
